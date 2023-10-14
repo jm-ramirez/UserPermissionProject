@@ -11,6 +11,10 @@ builder.Services.AddDbContext<UserPermissionDbContext>(options =>
 builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
 builder.Services.AddScoped<IPermissionTypeRepository, PermissionTypeRepository>();
 
+builder.Services.AddScoped<IRequestPermissionService, RequestPermissionService>();
+builder.Services.AddScoped<IModifyPermissionService, ModifyPermissionService>();
+builder.Services.AddScoped<IGetPermissionService, GetPermissionService>();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers();
