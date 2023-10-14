@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using UserPermissionApi.Data;
 using UserPermissionApi.Repositories;
+using UserPermissionApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ builder.Services.AddDbContext<UserPermissionDbContext>(options =>
 
 builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
 builder.Services.AddScoped<IPermissionTypeRepository, PermissionTypeRepository>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
