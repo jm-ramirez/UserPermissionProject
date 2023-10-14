@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using UserPermissionApi.Data;
 using UserPermissionApi.Repositories;
 using UserPermissionApi.Services;
+using UserPermissionApi.ElasticSearch;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,10 @@ builder.Services.AddScoped<IRequestPermissionService, RequestPermissionService>(
 builder.Services.AddScoped<IModifyPermissionService, ModifyPermissionService>();
 builder.Services.AddScoped<IGetPermissionService, GetPermissionService>();
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); 
+
+builder.Services.Configure<ElasticsearchSettings>(builder.Configuration.GetSection("ElasticsearchSettings"));
+builder.Services.AddSingleton<ElasticsearchClientProvider>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
