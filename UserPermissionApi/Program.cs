@@ -15,6 +15,7 @@ builder.Services.AddScoped<IPermissionTypeRepository, PermissionTypeRepository>(
 builder.Services.AddScoped<IRequestPermissionService, RequestPermissionService>();
 builder.Services.AddScoped<IModifyPermissionService, ModifyPermissionService>();
 builder.Services.AddScoped<IGetPermissionService, GetPermissionService>();
+builder.Services.AddScoped<IGetPermissionTypesService, GetPermissionTypesService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); 
 

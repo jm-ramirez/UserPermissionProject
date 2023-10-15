@@ -4,13 +4,13 @@ using UserPermissionApi.Services;
 
 [ApiController]
 [Route("api/permissions")]
-public class UserPermissionController : ControllerBase
+public class PermissionsController : ControllerBase
 {
     private readonly IRequestPermissionService _requestPermissionService;
     private readonly IModifyPermissionService _modifyPermissionService;
     private readonly IGetPermissionService _getPermissionService;
 
-    public UserPermissionController(IRequestPermissionService requestPermissionService, IGetPermissionService getPermissionService, IModifyPermissionService modifyPermissionService)
+    public PermissionsController(IRequestPermissionService requestPermissionService, IGetPermissionService getPermissionService, IModifyPermissionService modifyPermissionService)
     {
         _requestPermissionService = requestPermissionService;
         _modifyPermissionService = modifyPermissionService; 
@@ -47,7 +47,7 @@ public class UserPermissionController : ControllerBase
         }
     }
 
-    [HttpGet("get")]
+    [HttpGet]
     public IActionResult GetAllPermissions()
     {
         try
@@ -69,7 +69,7 @@ public class UserPermissionController : ControllerBase
         }
     }
 
-    [HttpGet("get/{permissionId}")]
+    [HttpGet("{permissionId}")]
     public IActionResult GetPermissionById(int permissionId)
     {
         try
