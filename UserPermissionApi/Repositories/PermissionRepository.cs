@@ -15,12 +15,12 @@ namespace UserPermissionApi.Repositories
 
         public async Task<Permissions> GetByIdAsync(int id)
         {
-            return await _context.Permissions.FindAsync(id);
+            return await _context.Permissions.Include(p => p.PermissionTypes).Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Permissions>> GetAllAsync()
         {
-            return await _context.Permissions.ToListAsync();
+            return await _context.Permissions.Include(p => p.PermissionTypes).ToListAsync();
         }
 
         public async Task AddAsync(Permissions permission)
