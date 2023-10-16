@@ -22,13 +22,16 @@ public class PermissionsController : ControllerBase
     {
         try
         {
-            await _requestPermissionService.Request(command);
+            var response = await _requestPermissionService.Request(command);
 
-            return Ok("Permiso creado con éxito.");
+            if (response == Nest.Result.Created)
+                return Ok("Permiso creado con éxito.");
+            else
+                return StatusCode(500, new { status = "error", message = "Error al crear nuevo permiso." });
         }
         catch (Exception)
         {
-            return Ok("Error al crear nuevo permiso.");
+            return StatusCode(500, new { status = "error", message = "Error al crear nuevo permiso." });
         }
     }
 

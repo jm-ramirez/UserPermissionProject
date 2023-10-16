@@ -1,4 +1,6 @@
-﻿using UserPermissionApi.Controllers.Schemas;
+﻿//using Nest;
+using Nest;
+using UserPermissionApi.Controllers.Schemas;
 using UserPermissionApi.Model;
 
 namespace UserPermissionApi.Services
@@ -11,7 +13,7 @@ namespace UserPermissionApi.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task Request(RequestPermissionCommand command)
+        public async Task<Result> Request(RequestPermissionCommand command)
         {
             _unitOfWork.BeginTransaction();
 
@@ -38,10 +40,13 @@ namespace UserPermissionApi.Services
                 // Confirma la transacción
                 await _unitOfWork.SaveChangesAsync();
                 _unitOfWork.Commit();
+
+                return Result.Created;
             }
             catch (Exception)
             {
                 _unitOfWork.Rollback();
+                return Result.Error;
             }
         }
     }

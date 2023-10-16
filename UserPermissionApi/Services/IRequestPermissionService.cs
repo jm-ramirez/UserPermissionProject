@@ -1,9 +1,10 @@
-﻿using UserPermissionApi.Controllers.Schemas;
+﻿using Nest;
+using UserPermissionApi.Controllers.Schemas;
 
 namespace UserPermissionApi.Services
 {
     public interface IRequestPermissionService
     {
-        Task Request(RequestPermissionCommand command);
+        Task<Result> Request(RequestPermissionCommand command);
     }
 }
