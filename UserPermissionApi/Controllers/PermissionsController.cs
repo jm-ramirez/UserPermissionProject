@@ -40,13 +40,16 @@ public class PermissionsController : ControllerBase
     {
         try
         {
-            await _modifyPermissionService.Update(command);
+            var response = await _modifyPermissionService.Update(command);
 
-            return Ok("Permiso actualizado exitosamente");
+            if (response == Nest.Result.Created)
+                return Ok("Permiso actualizado exitosamente");
+            else
+                return StatusCode(500, new { status = "error", message = "Error al actualizar permiso." });
         }
         catch (Exception ex)
         {
-            return BadRequest("Error al actualizar el permiso: " + ex.Message);
+            return StatusCode(500, new { status = "error", message = "Error al actualizar permiso." });
         }
     }
 
