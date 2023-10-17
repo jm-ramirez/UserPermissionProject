@@ -1,33 +1,57 @@
 using Xunit;
 using UserPermissionApi.Model;
+using UserPermissionApi.Repositories;
+using UserPermissionApi.Services;
+using Moq;
+using Nest;
+using UserPermissionApi.Controllers.Schemas;
+using System.Threading.Tasks;
 
 namespace UserPermissionUnitTest
 {
-    //public class UpdatePermissionServiceTests
-    //{
-    //    [Fact]
-    //    public void UpdatePermission_Should_Update_PermissionStatus()
-    //    {
-    //        // Arrange
-    //        var updatePermissionService = new UpdatePermissionService(); // Puedes utilizar inyección de dependencias o mocks en lugar de instanciar directamente
+    public class UpdatePermissionServiceTests
+    {
+        [Fact]
+        public async Task UpdatePermission_Should_Update_PermissionStatus()
+        {
+            // Arrange
+            var mockUnitOfWork = new Mock<IUnitOfWork>();
+            var mockPermissionTypesRepository = new Mock<IPermissionTypeRepository<PermissionTypes>>();
+            var mockPermissionsRepository = new Mock<IPermissionRepository<Permissions>>();
 
-    //        // Crea un permiso existente de ejemplo con un estado inicial
-    //        var existingPermission = new Permissions
-    //        {
-    //            Id = 123,
-    //            PermissionStatus = PermissionStatus.Requested, // Supongamos que este es el estado inicial
-    //                                                           // Otros campos requeridos para el permiso
-    //        };
+            // Simula el comportamiento de los métodos GetByNameAsync, UpdateAsync y SaveChangesAsync en IUnitOfWork
+            mockUnitOfWork.Setup(uow => uow.PermissionTypes).Returns(mockPermissionTypesRepository.Object);
+            mockUnitOfWork.Setup(uow => uow.Permissions).Returns(mockPermissionsRepository.Object);
 
-    //        // Definir el nuevo estado al que se actualizará el permiso
-    //        var newPermissionStatus = PermissionStatus.Approved;
+            var modifyPermissionService = new ModifyPermissionService(mockUnitOfWork.Object);
+            var requestCommand = new ModifyPermissionCommand
+            {
+                NombreEmpleado = "Juan",
+                ApellidoEmpleado = "Ramirez",
+                FechaPermiso = System.DateTime.Now,
+                TipoPermisoNombre = "Lider Técnico",
+            };
 
-    //        // Act
-    //        var updatedPermission = updatePermissionService.UpdatePermission(existingPermission, newPermissionStatus);
+            mockPermissionTypesRepository.Setup(repo => repo.GetByNameAsync(It.IsAny<string>()))
+                .ReturnsAsync((string typeName) =>
+                {
+                    // Simula el comportamiento de GetByNameAsync
+                    if (typeName == requestCommand.TipoPermisoNombre)
+                    {
+                        return null; // El tipo de permiso no existe
+                    }
+                    return new PermissionTypes { Id = 1, Descripcion = typeName };
+                });
 
-    //        // Assert
-    //        // Verificar que el estado del permiso actualizado sea igual al nuevo estado esperado
-    //        Assert.Equal(newPermissionStatus, updatedPermission.PermissionStatus);
-    //    }
-    //}
+            // Act
+            var result = await modifyPermissionService.Update(requestCommand);
+
+            // Assert
+            Assert.True(result == Result.Created);
+            // Verifica que se haya creado el permiso con el tipo de permiso correcto en mockPermissionsRepository
+            mockPermissionsRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Permissions>()), Times.Once);
+            // Realiza otras comprobaciones según la lógica de tu servicio
+            return;
+        }
+    }
 }

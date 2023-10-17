@@ -3,14 +3,15 @@ using UserPermissionApi.Data;
 using UserPermissionApi.Repositories;
 using UserPermissionApi.Services;
 using UserPermissionApi.ElasticSearch;
+using UserPermissionApi.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<UserPermissionDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
 
-builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
-builder.Services.AddScoped<IPermissionTypeRepository, PermissionTypeRepository>();
+builder.Services.AddScoped<IPermissionRepository<Permissions>, PermissionRepository>();
+builder.Services.AddScoped<IPermissionTypeRepository<PermissionTypes>, PermissionTypeRepository>();
 
 builder.Services.AddScoped<IRequestPermissionService, RequestPermissionService>();
 builder.Services.AddScoped<IModifyPermissionService, ModifyPermissionService>();

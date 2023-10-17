@@ -4,7 +4,7 @@ using UserPermissionApi.Model;
 
 namespace UserPermissionApi.Repositories
 {
-    public class PermissionTypeRepository : IPermissionTypeRepository
+    public class PermissionTypeRepository : IPermissionTypeRepository<PermissionTypes>
     {
         private readonly UserPermissionDbContext _context;
 

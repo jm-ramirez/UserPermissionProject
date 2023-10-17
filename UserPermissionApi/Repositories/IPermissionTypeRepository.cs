@@ -2,7 +2,7 @@
 
 namespace UserPermissionApi.Repositories
 {
-    public interface IPermissionTypeRepository
+    public interface IPermissionTypeRepository<T> where T : class
     {
         Task<PermissionTypes?> GetByIdAsync(int id);
         Task<PermissionTypes?> GetByNameAsync(string name);

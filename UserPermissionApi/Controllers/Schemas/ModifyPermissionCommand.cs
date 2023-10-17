@@ -3,18 +3,9 @@
     public class ModifyPermissionCommand
     {
         public int Id { get; set; }
-        public string NombreEmpleado { get; set; }
-        public string ApellidoEmpleado { get; set; }
-        public string TipoPermisoNombre { get; set; }
+        public string NombreEmpleado { get; set; } = string.Empty;
+        public string ApellidoEmpleado { get; set; } = string.Empty;
+        public string TipoPermisoNombre { get; set; } = string.Empty;
         public DateTime FechaPermiso { get; set; }
-
-        public ModifyPermissionCommand(int id, string nombreEmpleado, string apellidoEmpleado, string tipoPermisoNombre, DateTime fechaPermiso)
-        {
-            Id = id;
-            NombreEmpleado = nombreEmpleado;
-            ApellidoEmpleado = apellidoEmpleado;
-            TipoPermisoNombre = tipoPermisoNombre;
-            FechaPermiso = fechaPermiso;
-        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using UserPermissionApi.Data;
+using UserPermissionApi.Model;
 using UserPermissionApi.Repositories;
 
 namespace UserPermissionApi.Services
@@ -9,8 +10,8 @@ namespace UserPermissionApi.Services
         private readonly UserPermissionDbContext _context;
         private IDbContextTransaction _transaction;
 
-        public IPermissionRepository Permissions { get; }
-        public IPermissionTypeRepository PermissionTypes { get; }
+        public IPermissionRepository<Permissions> Permissions { get; }
+        public IPermissionTypeRepository<PermissionTypes> PermissionTypes { get; }
 
         public UnitOfWork(UserPermissionDbContext context)
         {
