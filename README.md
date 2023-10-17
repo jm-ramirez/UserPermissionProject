@@ -24,6 +24,7 @@ Before getting started, make sure you have the following prerequisites installed
 
 - [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0)
 - [Docker](https://www.docker.com/get-started)
+- [Sql Server](https://www.microsoft.com/es-ar/sql-server/sql-server-downloads)
 
 ### Setting Up the Database
 
