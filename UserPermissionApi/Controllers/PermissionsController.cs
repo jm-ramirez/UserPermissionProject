@@ -9,12 +9,18 @@ public class PermissionsController : ControllerBase
     private readonly IRequestPermissionService _requestPermissionService;
     private readonly IModifyPermissionService _modifyPermissionService;
     private readonly IGetPermissionService _getPermissionService;
+    private readonly IKafkaProducer _kafkaProducer; 
 
-    public PermissionsController(IRequestPermissionService requestPermissionService, IGetPermissionService getPermissionService, IModifyPermissionService modifyPermissionService)
+    public PermissionsController(
+        IRequestPermissionService requestPermissionService,
+        IGetPermissionService getPermissionService,
+        IModifyPermissionService modifyPermissionService,
+        IKafkaProducer kafkaProducer)
     {
         _requestPermissionService = requestPermissionService;
         _modifyPermissionService = modifyPermissionService; 
         _getPermissionService = getPermissionService;
+        _kafkaProducer = kafkaProducer;
     }
 
     [HttpPost("request")]
@@ -25,15 +31,28 @@ public class PermissionsController : ControllerBase
             var response = await _requestPermissionService.Request(command);
 
             if (response == Nest.Result.Created)
+            {
+                // Envía un mensaje a Kafka para registrar la operación "request"
+                var kafkaMessage = new KafkaMessageDto
+                {
+                    Id = Guid.NewGuid(), // Genera un ID único
+                    Operation = "request"
+                };
+                await _kafkaProducer.ProduceAsync(kafkaMessage);
+
                 return Ok("Permiso creado con éxito.");
+            }
             else
+            {
                 return StatusCode(500, new { status = "error", message = "Error al crear nuevo permiso." });
+            }
         }
         catch (Exception)
         {
             return StatusCode(500, new { status = "error", message = "Error al crear nuevo permiso." });
         }
     }
+
 
     [HttpPut("modify")]
     public async Task<IActionResult> UpdatePermission(ModifyPermissionCommand command)
@@ -42,8 +61,16 @@ public class PermissionsController : ControllerBase
         {
             var response = await _modifyPermissionService.Update(command);
 
-            if (response == Nest.Result.Created)
-                return Ok("Permiso actualizado exitosamente");
+            if (response == Nest.Result.Created) { 
+                var kafkaMessage = new KafkaMessageDto
+                {
+                    Id = Guid.NewGuid(), 
+                    Operation = "update"
+                };
+                await _kafkaProducer.ProduceAsync(kafkaMessage);
+
+                return Ok("Permiso actualizado exitosamente");            
+            }
             else
                 return StatusCode(500, new { status = "error", message = "Error al actualizar permiso." });
         }
@@ -54,7 +81,7 @@ public class PermissionsController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAllPermissions()
+    public async Task<IActionResult> GetAllPermissions()
     {
         try
         {
@@ -62,6 +89,13 @@ public class PermissionsController : ControllerBase
 
             if (permissions != null)
             {
+                var kafkaMessage = new KafkaMessageDto
+                {
+                    Id = Guid.NewGuid(),
+                    Operation = "get"
+                };
+                await _kafkaProducer.ProduceAsync(kafkaMessage);
+
                 return Ok(permissions);
             }
             else
@@ -76,7 +110,7 @@ public class PermissionsController : ControllerBase
     }
 
     [HttpGet("{permissionId}")]
-    public IActionResult GetPermissionById(int permissionId)
+    public async Task<IActionResult> GetPermissionById(int permissionId)
     {
         try
         {
@@ -84,6 +118,13 @@ public class PermissionsController : ControllerBase
 
             if (permission != null)
             {
+                var kafkaMessage = new KafkaMessageDto
+                {
+                    Id = Guid.NewGuid(),
+                    Operation = "getById"
+                };
+                await _kafkaProducer.ProduceAsync(kafkaMessage);
+
                 return Ok(permission);
             }
             else
