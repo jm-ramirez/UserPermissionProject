@@ -63,6 +63,20 @@ git clone https://github.com/jm-ramirez/UserPermissionProject.git
   ```
 The API should now be running at http://localhost:5000.
 
+### Configure Apache Kafka
+1. In your project, open the appsettings.json file.
+
+2. Add the Kafka configuration under "KafkaConfiguration" with the address and port of your Kafka server and your topic name.
+
+  ```json
+   {
+      "KafkaConfiguration": {
+         "BootstrapServers": "localhost:9092", // Address and port of Kafka brokers.
+         "TopicName": "your-topic-name" // Topic name.
+      }
+   }
+  ```
+
 ### Testing
 The unit tests for the UserPermissionApi project can be found in the UserPermissionUnitTest project. These tests ensure that the API functions correctly. You can run the tests using the following command within the UserPermissionUnitTest directory:
 
