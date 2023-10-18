@@ -43,14 +43,19 @@ Before getting started, make sure you have the following prerequisites installed
 
 ### Running the Projects
 
-1. Build and run the UserPermissionApi project:
+1. Clone the repository:
+```bash
+git clone https://github.com/jm-ramirez/UserPermissionProject.git
+```
+
+2. Build and run the UserPermissionApi project:
 
   ```bash
   cd UserPermissionApi
   dotnet run
   ```
 
-2. Build and run the UserPermissionUnitTest project in a Docker container:
+3. Build and run the UserPermissionUnitTest project in a Docker container:
 
   ```bash
   docker build -t userpermissionunittest-image -f UserPermissionUnitTest/Dockerfile .
