@@ -72,7 +72,7 @@ The API should now be running at http://localhost:5000.
    {
       "KafkaConfiguration": {
          "BootstrapServers": "localhost:9092", // Address and port of Kafka brokers.
-         "TopicName": "your-topic-name" // Topic name.
+         "TopicName": "user-permissions" // Topic name.
       }
    }
   ```
